@@ -37,7 +37,7 @@ if __name__ == '__main__':
         main()
         print ('Starting Discord Bot')
         try:
-            subprocess.call([sys.executable, 'chatbotbeta.py'], shell=False)
+            subprocess.call([sys.executable, 'afat_r.py'], shell=False)
         except:
             print ('gg')
         print ('Waiting... '+str(count))

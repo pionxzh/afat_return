@@ -1,4 +1,4 @@
 :top
-python chatbotbeta.py
+python afat_r.py
 pause
 goto top
