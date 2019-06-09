@@ -17,29 +17,58 @@ spline = '-' * 80
 async def on_ready():
     print('已登入Discord為: ')
     print('使用者名稱: ' + bot.user.name)
-    print('使用者ID: ' + bot.user.id)
+    print('使用者ID: ' + str(bot.user.id))
     print('使用者全名: ' + str(bot.user))
     print('MentionID: ' + bot.user.mention)
     print('顯示名稱: ' + bot.user.display_name)
     global own
-    own = await disbot.application_info()
+    own = await bot.application_info()
     own = own.owner
     print('擁有者: ' + str(own))
+    print('指令前輟: ' + command_prefix)
     print(spline)
     print('邀請碼: ')
-    print('https://discordapp.com/oauth2/authorize?client_id=' + disbot.user.id + '&scope=bot&permissions=8')
+    print('https://discordapp.com/oauth2/authorize?client_id=' + str(bot.user.id) + '&scope=bot&permissions=8')
     print(spline)
-    print('指令: ' + command_prefix)
 
-
-@bot.command(description='For when you wanna settle the score some other way')
-async def choose(ctx, *choices: str):
-    """Chooses between multiple choices."""
-    await ctx.send(random.choice(choices))
 
 @bot.command(description='pong!')
 async def ping(ctx):
-    """Chooses between multiple choices."""
-    await ctx.send('pong!')
 
-bot.run('token')
+    import datetime
+    now = datetime.datetime.now()
+    timezone = datetime.timedelta(hours=8)
+    delay = now - ctx.message.created_at - timezone
+    delay = delay.total_seconds()
+    delay = "%.3f" % float(str(delay))
+    await ctx.send(str(float(delay)) + ' pong!')
+
+
+@bot.event
+async def on_message_delete(msg):
+    if not msg.author.bot and not msg.content.startswith(command_prefix):
+        import datetime
+        now = datetime.datetime.now()
+        timezone = datetime.timedelta(hours=8)
+        delay = now - msg.created_at - timezone
+        delay = delay.total_seconds()
+        delay = "%.3f" % float(str(delay))
+        if float(delay) < 15:
+            embed = discord.Embed(description=msg.content, color=0xEE4BB5)
+            embed.set_author(name=msg.author.display_name, icon_url=msg.author.avatar_url)
+            for i, l in enumerate(msg.attachments):
+                i += 1
+                embed.add_field(name="圖 " + str(i), value=l['proxy_url'])
+            await msg.channel.send(content='自刪俠 **{0}** 在 **{1}** 秒內自刪ㄌ！'.format(msg.author.mention, delay),
+                                       embed=embed)
+
+
+def permission_check(member, channel):
+    permission = channel.permissions_for(member)
+    return permission.administrator
+    # permission_check(ctx.message.author, ctx.message.channel)
+
+
+with open('token', 'r') as t:
+    token = t.readline()
+bot.run(token)
