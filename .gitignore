@@ -4,6 +4,7 @@ gitPush.bat
 test.bat
 *.json
 *.txt
+temp.js
 token
 
 # Byte-compiled / optimized / DLL files
