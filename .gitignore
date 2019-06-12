@@ -6,6 +6,7 @@ test.bat
 *.txt
 temp.js
 token
+wkhtmltoimage.exe
 
 # Byte-compiled / optimized / DLL files
 venv
