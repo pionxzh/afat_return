@@ -27,7 +27,7 @@ js = """
 
 
 def fq(avatar_url, username, timestamp, ctx, max_width=600, scale=1.2, color='#dcddde'):
-    print(end='\r')
+
     # 設定wkhtmltoimage程式位置
     chdir(dir_path)
     config = imgkit.config(wkhtmltoimage=dir_path+'\\wkhtmltoimage.exe')
@@ -45,6 +45,8 @@ def fq(avatar_url, username, timestamp, ctx, max_width=600, scale=1.2, color='#d
     }
     output = 'out.png'
     imgkit.from_file(filename='sample.html', output_path=output, config=config, options=options)
+    # 調用47行會在終端出現一行字，目前找不到解法
+    # 已經試過調用stdout跟print('\r')等
     im = Image.open(output)
     size = (0, 3, im.size[0], im.size[1]-3)
     im = im.crop(size)

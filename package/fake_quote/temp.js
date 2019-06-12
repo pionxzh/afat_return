@@ -1,14 +1,14 @@
 
     {
-    document.getElementById("avatar").style.backgroundImage='url(https://cdn.discordapp.com/avatars/587274350986657792/9a4d48755f1ad1e21656d28680512fde.png)';
-    document.getElementById("username").innerHTML='阿肥Return';
+    document.getElementById("avatar").style.backgroundImage='url(https://cdn.discordapp.com/avatars/196536997039308800/a_67866b1edef6d67840a1e6b43c01e06b.png)';
+    document.getElementById("username").innerHTML=':))';
     document.getElementById("username").style.color='#dcddde';
-    document.getElementById("timestamp").innerHTML='今天晚上10點12分';
-    document.getElementById("ctx").innerHTML='==';
+    document.getElementById("timestamp").innerHTML='today';
+    document.getElementById("ctx").innerHTML='內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容內容';
     }
     
     var len = document.getElementById("ctx").scrollWidth;
-    var max_len = 600
+    var max_len = 700
     console.log(len);
     if (len > max_len) {
         document.getElementById("ctx").style.whiteSpace = 'pre-wrap';

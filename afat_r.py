@@ -36,7 +36,7 @@ async def on_ready():
 
 
 @bot.command(description='假造文字截圖')
-async def fake(ctx, member: discord.member, content):
+async def fake(ctx, member: discord.Member, content):
     # user = discord.utils.get(bot.get_all_members(), mention=member)  # 尋找該member
     time = datetime.datetime.now().strftime('%I{0}%M{1}').format('點', '分').strip('0')
     if datetime.datetime.now().strftime('%p') == 'AM':

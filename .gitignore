@@ -1,7 +1,6 @@
 ﻿config.ini
 gitPush.bat
-temp.png
-avatar.png
+*.png
 test.bat
 *.json
 *.txt
