@@ -3,41 +3,54 @@
 import imgkit
 from PIL import Image
 from os import path, chdir
-p = path.abspath(__file__)
-dir_path = path.dirname(p)
 
 # .js檔案內容，{{}}可跳脫
 js = """
-    {{
-    document.getElementById("avatar").style.backgroundImage='url({0})';
-    document.getElementById("username").innerHTML='{1}';
-    document.getElementById("username").style.color='{2}';
-    document.getElementById("timestamp").innerHTML='{3}';
-    document.getElementById("ctx").innerHTML='{4}';
+    document.getElementById('avatar').style.backgroundImage = 'url({0})';
+    document.getElementById('username').innerHTML = '{1}';
+    document.getElementById('username').style.color = '{2}';
+    document.getElementById('timestamp').innerHTML = '{3}';
+
+    var ctx = document.getElementById('ctx');
+
+    var content = '{4}';
+    var pattern = /\$-\$(.*?)\$-\$/g;
+    var callback = function(match, nick) {{
+        return '<span class="mention-user">@' + nick + '</span>';
     }}
-    
-    var len = document.getElementById("ctx").scrollWidth;
-    var max_len = {5}
+    content = content.replace(pattern, callback);
+    ctx.innerHTML = content;
+
+    var len = ctx.scrollWidth;
+    var max_len = {5};
     console.log(len);
     if (len > max_len) {{
-        document.getElementById("ctx").style.whiteSpace = 'pre-wrap';
-        document.getElementById("ctx").style.width = max_len + 'px';
+        ctx.style.whiteSpace = 'pre-wrap';
+        ctx.style.width = max_len + 'px';
     }}
 """
 
-
-def fq(avatar_url, username, timestamp, ctx, max_width=600, scale=1.2, color='#dcddde'):
-
-    # 設定wkhtmltoimage程式位置
+def change_cwd ():
+    dir_path = path.dirname(path.abspath(__file__))
     chdir(dir_path)
-    config = imgkit.config(wkhtmltoimage=dir_path+'\\wkhtmltoimage.exe')
-    script = js.format(avatar_url, username, color, timestamp, ctx, str(max_width))
+    return dir_path
+
+def inject_js(avatar, username, color, timestamp, content, max_width):
+    script = js.format(avatar, username, color, timestamp, content, str(max_width))
     with open('temp.js', 'w', encoding='UTF-8') as f:
         f.write(script)
+
+def fq(avatar, username, timestamp, content, max_width=300, scale=1.2, color='#dcddde'):
+
+    dir_path = change_cwd()
+    inject_js(avatar, username, color, timestamp, content, max_width)
+
+    # 設定wkhtmltoimage程式位置
+    config = imgkit.config(wkhtmltoimage=path.join(dir_path, 'wkhtmltoimage.exe'))
     options = {
         'format': 'png',
-        'encoding': "UTF-8",
-        'quality': "100",
+        'encoding': 'UTF-8',
+        'quality': '100',
         'transparent': '',
         'zoom': str(scale),
         'quiet': '',
@@ -57,6 +70,6 @@ def fq(avatar_url, username, timestamp, ctx, max_width=600, scale=1.2, color='#d
 
 
 if __name__ == '__main__':
-    url = "https://cdn.discordapp.com/avatars/196536997039308800/a_67866b1edef6d67840a1e6b43c01e06b.png"
+    url = 'https://cdn.discordapp.com/avatars/196536997039308800/a_67866b1edef6d67840a1e6b43c01e06b.png'
     fq(url, ':))', 'today', '內容'*50, 700, 1.3)
 

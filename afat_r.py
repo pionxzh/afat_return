@@ -1,6 +1,7 @@
 #!/usr/bin/python3.6
 # coding=utf-8
 
+import re
 import discord
 import datetime
 from discord.ext import commands
@@ -34,10 +35,19 @@ async def on_ready():
     print('https://discordapp.com/oauth2/authorize?client_id=' + str(bot.user.id) + '&scope=bot&permissions=8')
     print(spline)
 
+def parse_content(ctx, content):
+    mentions = ctx.message.mentions
+    for user in mentions:
+        #USERS_PATTERN = re.compile(r'/<@!?(\d{17,19})>/g')
+        USERS_PATTERN = re.compile(r'/<@!?{0}}>'.format(user.id))
+        content = re.sub(USERS_PATTERN, r'$-${0}$-$'.format(user.nick), content)
+
+    return mentions
 
 @bot.command(description='假造文字截圖')
 async def fake(ctx, member: discord.Member, content):
     # user = discord.utils.get(bot.get_all_members(), mention=member)  # 尋找該member
+    content = parse_content(ctx, content)
     time = datetime.datetime.now().strftime('%I{0}%M{1}').format('點', '分').strip('0')
     if datetime.datetime.now().strftime('%p') == 'AM':
         noon = '今天上午'
