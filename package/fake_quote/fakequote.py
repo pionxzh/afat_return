@@ -40,7 +40,7 @@ def inject_js(avatar, username, color, timestamp, content, max_width):
     with open('temp.js', 'w', encoding='UTF-8') as f:
         f.write(script)
 
-def fq(avatar, username, timestamp, content, max_width=300, scale=1.2, color='#dcddde'):
+def fq(avatar, username, timestamp, content, max_width=400, scale=1.2, color='#dcddde'):
 
     dir_path = change_cwd()
     inject_js(avatar, username, color, timestamp, content, max_width)
